@@ -108,11 +108,15 @@
 
     function getImageUrl(item) {
       const barcode = item.barcode || 'NO_BARCODE';
-      return `images/${barcode}.jpg`;
+      // 自動適應 GitHub Pages 子路徑 (例如 /SEGA/)
+      return `images/${barcode}.webp`;
     }
 
     function handleImageError(img, barcode) {
-      if (!img.dataset.triedJpeg) {
+      if (!img.dataset.triedJpg) {
+        img.dataset.triedJpg = "true";
+        img.src = `images/${barcode}.jpg`;
+      } else if (!img.dataset.triedJpeg) {
         img.dataset.triedJpeg = "true";
         img.src = `images/${barcode}.jpeg`;
       } else {
