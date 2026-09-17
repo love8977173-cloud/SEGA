@@ -108,7 +108,6 @@
 
     function getImageUrl(item) {
       const barcode = item.barcode || 'NO_BARCODE';
-      // 使用絕對相對路徑 ./images/ 確保 GitHub Pages 子路徑正確尋址
       return `./images/${barcode}.webp`;
     }
 
@@ -132,7 +131,7 @@
           <div>
             <div class="relative w-full aspect-square bg-slate-800 overflow-hidden cursor-zoom-in" 
                  onclick="openModal('${finalImg}', '${item.name.replace(/'/g, "\\'")}')">
-              <img src="${finalImg}" loading="lazy" alt="${item.name}" 
+              <img src="${finalImg}" loading="lazy" decoding="async" alt="${item.name}" 
                    class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                    onerror="handleImageError(this, '${item.barcode}')"/>
               <span class="absolute top-2 left-2 px-2 py-0.5 text-xs font-semibold bg-slate-950/80 text-amber-300 rounded backdrop-blur-sm">
@@ -228,7 +227,7 @@
 
           <div class="w-full md:w-56 aspect-square bg-slate-800 relative overflow-hidden cursor-zoom-in flex-shrink-0"
                onclick="openModal('${finalImg}', '${item.name.replace(/'/g, "\\'")}')">
-            <img src="${finalImg}" loading="lazy" alt="${item.name}" 
+            <img src="${finalImg}" loading="lazy" decoding="async" alt="${item.name}" 
                  class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                  onerror="handleImageError(this, '${item.barcode}')"/>
             <span class="absolute bottom-2 right-2 px-1.5 py-0.5 text-[10px] bg-slate-900/80 text-slate-300 rounded">
@@ -269,7 +268,7 @@
         if (entries[0].isIntersecting && currentIndex < filteredProducts.length) {
           loadNextPage();
         }
-      }, { rootMargin: '150px' });
+      }, { rootMargin: '250px' });
       observer.observe(sentinel);
     }
 
