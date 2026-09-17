@@ -55,7 +55,6 @@
     let currentIndex = 0;
     let currentViewMode = 'card';
     const PAGE_SIZE = 10;
-    const GDRIVE_FOLDER_ID = "1BmZALAAEekpwPxNXgcoVQmG5r2PeqNvP";
 
     async function init() {
       try {
@@ -108,7 +107,8 @@
     }
 
     function getImageUrl(item) {
-      return `https://drive.google.com/thumbnail?id={GDRIVE_FOLDER_ID}&sz=w600`;
+      const barcode = item.barcode || 'NO_BARCODE';
+      return `images/${barcode}.jpg`;
     }
 
     function createCard(item) {
@@ -117,7 +117,7 @@
         <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col justify-between shadow-lg hover:border-amber-400/40 transition-all">
           <div>
             <div class="relative w-full aspect-square bg-slate-800 overflow-hidden cursor-zoom-in" 
-                 onclick="openModal('${finalImg}', '${item.name.replace(/'/g, "\\\'")}')">
+                 onclick="openModal('${finalImg}', '${item.name.replace(/'/g, "\\'")}')">
               <img src="${finalImg}" loading="lazy" alt="${item.name}" 
                    class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                    onerror="this.src='https://placehold.co/400x400/1e293b/94a3b8?text=${item.barcode}'"/>
@@ -148,7 +148,7 @@
               <span class="text-lg font-bold text-amber-400">NT$ ${item.preorder_price}</span>
             </div>
             <div class="grid grid-cols-2 gap-2">
-              <button onclick="copyOrder('${item.barcode}', '${item.name.replace(/'/g, "\\\'")}', ${item.preorder_price})" 
+              <button onclick="copyOrder('${item.barcode}', '${item.name.replace(/'/g, "\\'")}', ${item.preorder_price})" 
                       class="py-1.5 text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg transition-colors flex items-center justify-center">
                 <span>📋 複製商品</span>
               </button>
@@ -200,7 +200,7 @@
                 </div>
               </div>
               <div class="flex gap-2 pt-3">
-                <button onclick="copyOrder('${item.barcode}', '${item.name.replace(/'/g, "\\\'")}', ${item.preorder_price})" 
+                <button onclick="copyOrder('${item.barcode}', '${item.name.replace(/'/g, "\\'")}', ${item.preorder_price})" 
                         class="flex-1 py-1.5 text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg transition-colors">
                   📋 複製下單
                 </button>
@@ -213,7 +213,7 @@
           </div>
 
           <div class="w-full md:w-56 aspect-square bg-slate-800 relative overflow-hidden cursor-zoom-in flex-shrink-0"
-               onclick="openModal('${finalImg}', '${item.name.replace(/'/g, "\\\'")}')">
+               onclick="openModal('${finalImg}', '${item.name.replace(/'/g, "\\'")}')">
             <img src="${finalImg}" loading="lazy" alt="${item.name}" 
                  class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                  onerror="this.src='https://placehold.co/400x400/1e293b/94a3b8?text=${item.barcode}'"/>
