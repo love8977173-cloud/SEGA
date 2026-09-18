@@ -41,20 +41,19 @@
 
     <main class="max-w-7xl mx-auto px-2 py-3">
       <div id="productGrid" class="catalog-grid"></div>
-      <div id="productList" class="hidden flex flex-col gap-2 max-w-4xl mx-auto"></div>
+      <div id="productList" class="hidden flex flex-col gap-2.5 max-w-5xl mx-auto"></div>
     </main>
   </div>
 
-  <!-- 每頁 12 項分頁控制列 -->
+  <!-- 分頁控制列 (每頁 12 項) -->
   <footer class="bg-slate-900/90 border-t border-slate-800 py-3 px-4 mt-6">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
       <div id="pageInfo" class="text-slate-400">顯示第 1 / 1 頁 (共 0 項)</div>
-      <div class="flex items-center gap-1.5" id="paginationControls">
-        <!-- 分頁按鈕由 JS 自動產生 -->
-      </div>
+      <div class="flex items-center gap-1.5" id="paginationControls"></div>
     </div>
   </footer>
 
+  <!-- 燈箱放大 -->
   <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-sm flex items-center justify-center p-3 cursor-zoom-out" onclick="closeModal()">
     <div class="relative max-w-3xl max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
       <img id="modalImg" src="" class="max-w-full max-h-[80vh] rounded-lg shadow-2xl object-contain border border-slate-700">
@@ -68,7 +67,7 @@
     let filteredProducts = [];
     let currentPage = 1;
     let currentViewMode = 'card';
-    const PAGE_SIZE = 12; // 嚴格採用雙數 12 項
+    const PAGE_SIZE = 12;
 
     async function init() {
       try {
@@ -187,30 +186,35 @@
       const finalImg = getImageUrl(item);
       return `
         <div class="bg-slate-900 border border-slate-800 rounded-lg overflow-hidden shadow flex hover:border-amber-400/40 transition-all text-xs">
-          <div class="w-24 sm:w-32 aspect-square bg-slate-800 relative flex-shrink-0 cursor-zoom-in"
+          <div class="w-24 sm:w-28 aspect-square bg-slate-800 relative flex-shrink-0 cursor-zoom-in"
                onclick="openModal('${finalImg}', '${item.name.replace(/'/g, "\\'")}')">
             <img src="${finalImg}" loading="lazy" decoding="async" alt="${item.name}" 
                  class="w-full h-full object-cover" onerror="handleImageError(this, '${item.barcode}')"/>
           </div>
-          <div class="flex-1 p-2.5 flex flex-col justify-between">
+          <div class="flex-1 p-3 flex flex-col justify-between">
             <div>
-              <div class="flex justify-between items-center text-[10px] text-slate-400">
-                <span>編號: #${item.id} | ${item.brand}</span>
-                <span class="font-mono text-amber-400">${item.barcode}</span>
+              <div class="flex justify-between items-center text-[11px] text-slate-400">
+                <span class="font-medium text-slate-300">編號: #${item.id} ｜ ${item.brand}</span>
+                <span class="font-mono text-amber-400/90 text-xs">${item.barcode}</span>
               </div>
-              <h3 class="font-medium text-slate-100 text-xs mt-1 line-clamp-2 leading-tight">${item.name}</h3>
-              <p class="text-[10px] text-slate-400 mt-1">預定上市: ${item.release_date} ｜ <span class="text-rose-400">結單: ${item.close_date}</span></p>
+              <h3 class="font-medium text-slate-100 text-sm mt-1 leading-snug line-clamp-2">${item.name}</h3>
+              <p class="text-[11px] text-slate-400 mt-1">預定上市: <span class="font-mono text-slate-300">${item.release_date}</span> ｜ <span class="text-rose-400 font-medium">結單: ${item.close_date}</span></p>
             </div>
-            <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
-              <span class="text-sm font-bold text-amber-400">NT$ ${item.preorder_price}</span>
-              <div class="flex gap-1">
+            
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pt-2.5 border-t border-slate-800/80 gap-2 mt-2">
+              <div class="flex items-baseline gap-1.5">
+                <span class="text-[11px] text-slate-400">預購價</span>
+                <span class="text-base font-black text-amber-400 font-mono">NT$ ${item.preorder_price}</span>
+              </div>
+              <!-- 加寬導向按鈕區塊 -->
+              <div class="flex gap-2">
                 <button onclick="copyOrder('${item.barcode}', '${item.name.replace(/'/g, "\\'")}', ${item.preorder_price})" 
-                        class="px-2 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded text-[11px]">
-                  📋 複製
+                        class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded shadow-sm text-xs transition-colors flex items-center justify-center min-w-[110px]">
+                  📋 複製商品資訊
                 </button>
                 <a href="https://m.me/JavaRudo" target="_blank" rel="noopener noreferrer"
-                   class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded text-[11px]">
-                  💬 私訊
+                   class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded shadow-sm text-xs transition-colors flex items-center justify-center min-w-[110px]">
+                  💬 FB私訊訂購
                 </a>
               </div>
             </div>
@@ -240,10 +244,8 @@
         }
       });
 
-      // 更新分頁資訊與控制按鈕
       document.getElementById('pageInfo').innerText = `顯示第 ${currentPage} / ${totalPages} 頁 (本頁 ${currentBatch.length} 項，共 ${totalItems} 項)`;
       renderPaginationControls(totalPages);
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
