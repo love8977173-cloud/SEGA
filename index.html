@@ -73,7 +73,6 @@
         allProducts = await res.json();
         filteredProducts = allProducts;
         
-        // 動態解析標題品牌與結單日期
         updateDynamicTitles();
         renderPage();
       } catch (err) {
@@ -83,16 +82,11 @@
 
     function updateDynamicTitles() {
       if (allProducts.length === 0) return;
-      
-      // 取得第一個商品的品牌與結單日作為目錄代表
       let brand = allProducts[0].brand || "預購商品";
       let closeDate = allProducts[0].close_date || "依公告";
-      
-      // 清理品牌名稱中較長的括號說明
       if (brand.includes("(")) {
         brand = brand.split("(")[0].trim();
       }
-
       const titleStr = `${brand}預購目錄 ｜ ${closeDate} 截止`;
       document.getElementById('pageTitle').innerText = titleStr + " - 爪哇魯多模型店";
       document.getElementById('headerTitle').innerText = `爪哇魯多模型店 ｜ ${titleStr}`;
@@ -120,7 +114,7 @@
     }
 
     function openModal(src, title) {
-      document.getElementById('modalImg').src = src;
+      document.getElementById('modalImg').src = src + '?t=' + Date.now();
       document.getElementById('modalCaption').innerText = title;
       document.getElementById('imageModal').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
@@ -133,16 +127,17 @@
 
     function getImageUrl(item) {
       const barcode = item.barcode || 'NO_BARCODE';
-      return `./images/${barcode}.webp`;
+      // 加上時間戳記強制破除瀏覽器與 CDN 快取，確保永遠抓取最新圖檔
+      return `./images/${barcode}.webp?t=v2`;
     }
 
     function handleImageError(img, barcode) {
       if (!img.dataset.triedJpg) {
         img.dataset.triedJpg = "true";
-        img.src = `./images/${barcode}.jpg`;
+        img.src = `./images/${barcode}.jpg?t=v2`;
       } else if (!img.dataset.triedJpeg) {
         img.dataset.triedJpeg = "true";
-        img.src = `./images/${barcode}.jpeg`;
+        img.src = `./images/${barcode}.jpeg?t=v2`;
       } else {
         img.onerror = null;
         img.src = `https://placehold.co/300x300/1e293b/94a3b8?text=${barcode}`;
