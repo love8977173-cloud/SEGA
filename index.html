@@ -167,14 +167,17 @@
               <span class="text-[10px] text-slate-400">特惠價</span>
               <span class="text-sm font-bold text-amber-400">NT$ ${item.preorder_price}</span>
             </div>
-            <div class="grid grid-cols-2 gap-1">
+            <!-- 卡片模式導向按鈕 (同步更新明確資訊) -->
+            <div class="grid grid-cols-2 gap-1 pt-0.5">
               <button onclick="copyOrder('${item.barcode}', '${item.name.replace(/'/g, "\\'")}', ${item.preorder_price})" 
-                      class="py-1 text-[11px] font-medium bg-amber-500 hover:bg-amber-400 text-slate-950 rounded transition-colors flex items-center justify-center">
-                <span>📋 複製</span>
+                      class="py-1 px-1 text-[10px] sm:text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 rounded transition-colors flex items-center justify-center truncate"
+                      title="複製商品資訊">
+                <span>📋 複製商品資訊</span>
               </button>
               <a href="https://m.me/JavaRudo" target="_blank" rel="noopener noreferrer"
-                 class="py-1 text-[11px] font-medium bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors flex items-center justify-center">
-                <span>💬 私訊</span>
+                 class="py-1 px-1 text-[10px] sm:text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors flex items-center justify-center truncate"
+                 title="FB私訊訂購">
+                <span>💬 FB私訊訂購</span>
               </a>
             </div>
           </div>
@@ -206,7 +209,7 @@
                 <span class="text-[11px] text-slate-400">預購價</span>
                 <span class="text-base font-black text-amber-400 font-mono">NT$ ${item.preorder_price}</span>
               </div>
-              <!-- 加寬導向按鈕區塊 -->
+              <!-- 清單模式導向按鈕 (同步加寬與明確標示) -->
               <div class="flex gap-2">
                 <button onclick="copyOrder('${item.barcode}', '${item.name.replace(/'/g, "\\'")}', ${item.preorder_price})" 
                         class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded shadow-sm text-xs transition-colors flex items-center justify-center min-w-[110px]">
