@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>爪哇魯多模型店 - 預購商品目錄</title>
+  <title id="pageTitle">爪哇魯多模型店 - 預購商品目錄</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .catalog-grid {
@@ -25,7 +25,7 @@
       <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
         <div class="flex items-center space-x-2">
           <span class="text-xl">🤖</span>
-          <h1 class="text-base sm:text-lg font-bold tracking-wider text-amber-400">爪哇魯多模型店 ｜ 預購目錄</h1>
+          <h1 id="headerTitle" class="text-base sm:text-lg font-bold tracking-wider text-amber-400">爪哇魯多模型店 ｜ 預購目錄</h1>
         </div>
         
         <div class="flex items-center gap-2 w-full sm:w-auto">
@@ -72,10 +72,30 @@
         const res = await fetch('data.json?t=' + Date.now());
         allProducts = await res.json();
         filteredProducts = allProducts;
+        
+        // 動態解析標題品牌與結單日期
+        updateDynamicTitles();
         renderPage();
       } catch (err) {
         document.getElementById('productGrid').innerHTML = '<p class="text-rose-400 p-4">無法載入 data.json</p>';
       }
+    }
+
+    function updateDynamicTitles() {
+      if (allProducts.length === 0) return;
+      
+      // 取得第一個商品的品牌與結單日作為目錄代表
+      let brand = allProducts[0].brand || "預購商品";
+      let closeDate = allProducts[0].close_date || "依公告";
+      
+      // 清理品牌名稱中較長的括號說明
+      if (brand.includes("(")) {
+        brand = brand.split("(")[0].trim();
+      }
+
+      const titleStr = `${brand}預購目錄 ｜ ${closeDate} 截止`;
+      document.getElementById('pageTitle').innerText = titleStr + " - 爪哇魯多模型店";
+      document.getElementById('headerTitle').innerText = `爪哇魯多模型店 ｜ ${titleStr}`;
     }
 
     function switchViewMode(mode) {
@@ -241,7 +261,7 @@
         }
       });
 
-      document.getElementById('pageInfo').innerText = `顯示第 ${currentPage} / ${totalPages} 頁 (本頁 ${currentBatch.length} 項，共 ${totalItems} 項)`;
+      document.getElementById('pageInfo').innerText = `顯示第 ${currentPage} / ${totalPages} 頁 (本頁 ${currentBatch.length} 項, 共 ${totalItems} 項)`;
       renderPaginationControls(totalPages);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
